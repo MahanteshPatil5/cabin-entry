@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SVCE CentreBook – Welcome</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --primary:#1E3A8A;--primary-light:#3B82F6;
+      --green:#22C55E;--green-bg:#F0FDF4;
+      --yellow:#F59E0B;--yellow-bg:#FFFBEB;
+      --red:#EF4444;--red-bg:#FEF2F2;
+      --gray-800:#1F2937;--gray-600:#4B5563;--gray-400:#9CA3AF;
+      --radius:16px;
+    }
+    body{font-family:'DM Sans',sans-serif;background:#0F172A;color:white;min-height:100vh}
+
+    /* NAV */ 
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:200;
+      background:rgba(15,23,42,.85);backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(255,255,255,.08);
+      height:64px;display:flex;align-items:center;
+      padding:0 28px;justify-content:space-between;
+    }
+    .nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+    .nav-logo{
+      width:40px;height:40px;border-radius:10px;
+      background:linear-gradient(135deg,#1E3A8A,#3B82F6);
+      display:flex;align-items:center;justify-content:center;
+      font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:800;color:white;
+    }
+    .nav-name{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:white}
+    .nav-name span{color:#60A5FA}
+    .nav-college{font-size:11px;color:#94A3B8;letter-spacing:.3px}
+    .nav-right{display:flex;gap:10px;align-items:center}
+    .nav-pill{
+      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.8);padding:8px 18px;border-radius:50px;
+      font-size:13px;text-decoration:none;transition:all .2s;cursor:pointer;
+    }
+    .nav-pill:hover{background:rgba(255,255,255,.15);color:white}
+    .nav-pill.primary{background:#3B82F6;border-color:#3B82F6;color:white;font-weight:500}
+    .nav-pill.primary:hover{background:#2563EB}
+
+    /* HERO */
+    .hero{
+      min-height:100vh;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;
+      text-align:center;padding:100px 24px 60px;
+      position:relative;overflow:hidden;
+    }
+      /* ===== IMAGE SLIDER ===== */
+    .slider {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+}
+
+    .slide {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+}
+
+    .slide.active {
+      opacity: 0.4;
+}
+    
+    .hero-bg{
+      position:absolute;inset:0;
+      background:linear-gradient(135deg,#0F172A 0%,#1E3A8A 50%,#0F172A 100%);
+    }
+    .hero-bg::after{
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse at 50% 0%,rgba(59,130,246,.25) 0%,transparent 70%);
+    }
+    .hero-content{position:relative;z-index:1;max-width:680px}
+    .hero-badge{
+      display:inline-flex;align-items:center;gap:8px;
+      background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);
+      color:#93C5FD;padding:8px 20px;border-radius:50px;
+      font-size:13px;font-weight:500;margin-bottom:28px;
+    }
+    .badge-dot{width:6px;height:6px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
+    .hero-title{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(38px,7vw,68px);font-weight:800;
+      line-height:1.05;margin-bottom:20px;
+      background:linear-gradient(135deg,white 0%,#93C5FD 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    }
+    .hero-sub{font-size:clamp(15px,2.5vw,18px);color:#94A3B8;line-height:1.7;margin-bottom:40px}
+    .hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+    .btn-hero{
+      padding:16px 36px;border-radius:50px;font-family:'Space Grotesk',sans-serif;
+      font-size:16px;font-weight:600;cursor:pointer;text-decoration:none;
+      display:inline-flex;align-items:center;gap:8px;transition:all .25s;border:none;
+    }
+    .btn-hero.primary{background:linear-gradient(135deg,#3B82F6,#1D4ED8);color:white;box-shadow:0 8px 32px rgba(59,130,246,.4)}
+    .btn-hero.primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(59,130,246,.5)}
+    .btn-hero.outline{background:transparent;color:white;border:1.5px solid rgba(255,255,255,.25)}
+    .btn-hero.outline:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.4)}
+
+    /* LIVE STATS BAR */
+    .stats-bar{
+      display:flex;gap:0;margin-top:52px;
+      background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+      border-radius:16px;overflow:hidden;flex-wrap:wrap;
+    }
+    .stat-item{
+      flex:1;min-width:100px;padding:18px 24px;text-align:center;
+      border-right:1px solid rgba(255,255,255,.08);
+    }
+    .stat-item:last-child{border-right:none}
+    .stat-num{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;color:white}
+    .stat-num.green{color:#4ADE80}
+    .stat-num.yellow{color:#FCD34D}
+    .stat-num.red{color:#F87171}
+    .stat-lbl{font-size:11px;color:#64748B;text-transform:uppercase;letter-spacing:.6px;margin-top:3px}
+
+    /* ROOMS SECTION */
+    .rooms-section{padding:60px 24px 80px;max-width:1200px;margin:0 auto}
+    .section-header{text-align:center;margin-bottom:44px}
+    .section-tag{
+      display:inline-block;background:rgba(59,130,246,.15);
+      color:#60A5FA;padding:5px 16px;border-radius:20px;
+      font-size:12px;font-weight:500;letter-spacing:.5px;
+      text-transform:uppercase;margin-bottom:14px;
+    }
+    .section-title{
+      font-family:'Space Grotesk',sans-serif;font-size:clamp(26px,4vw,38px);
+      font-weight:700;color:white;margin-bottom:10px;
+    }
+    .section-sub{color:#64748B;font-size:15px}
+
+    /* ROOM CARDS GRID */
+    .rooms-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+
+    .room-card{
+      border-radius:var(--radius);overflow:hidden;cursor:pointer;
+      background:#1E293B;border:1px solid rgba(255,255,255,.08);
+      transition:transform .25s,box-shadow .25s,border-color .25s;
+      position:relative;
+    }
+    .room-card:hover{transform:translateY(-5px);box-shadow:0 20px 60px rgba(0,0,0,.4);border-color:rgba(59,130,246,.4)}
+
+    .room-photo{
+      width:100%;height:180px;object-fit:cover;display:block;
+      transition:transform .4s;
+    }
+    .room-card:hover .room-photo{transform:scale(1.04)}
+    .room-photo-wrap{overflow:hidden;position:relative}
+    .room-photo-overlay{
+      position:absolute;inset:0;
+      background:linear-gradient(to bottom,transparent 40%,rgba(15,23,42,.85) 100%);
+    }
+    .room-status-badge{
+      position:absolute;top:12px;right:12px;
+      display:flex;align-items:center;gap:5px;
+      padding:5px 12px;border-radius:20px;
+      font-size:12px;font-weight:600;backdrop-filter:blur(8px);
+    }
+    .room-status-badge.available{background:rgba(34,197,94,.2);color:#4ADE80;border:1px solid rgba(34,197,94,.3)}
+    .room-status-badge.partial{background:rgba(245,158,11,.2);color:#FCD34D;border:1px solid rgba(245,158,11,.3)}
+    .room-status-badge.full{background:rgba(239,68,68,.2);color:#F87171;border:1px solid rgba(239,68,68,.3)}
+    .sbdot{width:6px;height:6px;border-radius:50%}
+    .available .sbdot{background:#4ADE80}
+    .partial .sbdot{background:#FCD34D}
+    .full .sbdot{background:#F87171}
+
+    .room-body{padding:18px}
+    .room-name{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;color:white;margin-bottom:4px}
+    .room-type{font-size:12px;color:#64748B;margin-bottom:14px}
+    .cap-row{display:flex;justify-content:space-between;font-size:12px;color:#64748B;margin-bottom:7px}
+    .cap-bar-bg{height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;margin-bottom:14px}
+    .cap-bar-fill{height:100%;border-radius:3px;transition:width .5s}
+    .cap-bar-fill.available{background:linear-gradient(90deg,#22C55E,#4ADE80)}
+    .cap-bar-fill.partial{background:linear-gradient(90deg,#F59E0B,#FCD34D)}
+    .cap-bar-fill.full{background:linear-gradient(90deg,#EF4444,#F87171)}
+    .room-footer{display:flex;justify-content:space-between;align-items:center}
+    .seats-left{font-size:13px;color:#94A3B8}
+    .seats-left strong{color:white}
+    .book-btn{
+      background:linear-gradient(135deg,#3B82F6,#1D4ED8);
+      color:white;border:none;padding:8px 18px;
+      border-radius:8px;font-size:13px;font-weight:500;
+      cursor:pointer;transition:all .2s;
+    }
+    .book-btn:hover{background:linear-gradient(135deg,#2563EB,#1E40AF);transform:scale(1.03)}
+    .book-btn:disabled{background:rgba(255,255,255,.08);color:#475569;cursor:not-allowed;transform:none}
+
+    /* HOW IT WORKS */
+    .how-section{
+      background:rgba(255,255,255,.02);
+      border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid rgba(255,255,255,.06);
+      padding:60px 24px;
+    }
+    .how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:28px;max-width:900px;margin:0 auto}
+    .how-card{text-align:center;padding:28px 20px}
+    .how-num{
+      width:48px;height:48px;border-radius:50%;
+      background:linear-gradient(135deg,#1E3A8A,#3B82F6);
+      display:flex;align-items:center;justify-content:center;
+      font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;
+      color:white;margin:0 auto 16px;
+    }
+    .how-title{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;color:white;margin-bottom:8px}
+    .how-desc{font-size:13px;color:#64748B;line-height:1.6}
+
+    /* FOOTER */
+    footer{
+      text-align:center;padding:28px;
+      color:#334155;font-size:13px;
+      border-top:1px solid rgba(255,255,255,.05);
+    }
+    footer strong{color:#64748B}
+
+    /* REFRESH INDICATOR */
+    .refresh-tag{
+      display:inline-flex;align-items:center;gap:6px;
+      background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);
+      color:#4ADE80;padding:5px 14px;border-radius:20px;font-size:12px;
+      margin-top:16px;
+    }
+    .spin{animation:spin .8s linear infinite;display:inline-block}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="welcome.html" class="nav-brand">
+    <div class="nav-logo">CB</div>
+    <div>
+      <div class="nav-name">Centre<span>Book</span></div>
+      <div class="nav-college">SVCE Bengaluru</div>
+    </div>
+  </a>
+  <div class="nav-right">
+  <!-- <a href="history.html" class="nav-pill">📋 History</a> -->
+  <a href="admin/admin-login.html" class="admin-link nav-pill primary">🧑‍💼Admin</a>
+  <a href="rooms.html" class="nav-pill primary">Book a Space →</a>
+  <a href="logout.html" class="nav-pill" style="background:#EF4444;color:white;">🚪 Logout</a>
+</div>
+</nav>
+
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="slider">
+  <img src="images/svce1.png" class="slide active">
+  <img src="images/svce_clg.jpeg" class="slide">
+  <img src="images/poster.png" class="slide">
+</div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Live Room Availability · SVCE Community Centre
+    </div>
+    <h1 class="hero-title">Welcome to SVCE<br>Registration System</h1>
+    <p class="hero-sub">Scan a QR code at any room entrance or browse and book spaces instantly. Real-time availability, zero paperwork.</p>
+    <div class="hero-cta">
+      <a href="prebook/prebook.html" class="btn-hero primary">📅 PRE-BOOK</a>
+      <a href="rooms.html" class="btn-hero primary">🏠 Browse All Rooms</a>
+      <a href="index.html" class="btn-hero outline">📷 Scan QR Code</a>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-item"><div class="stat-num" id="s-total">10</div><div class="stat-lbl">Total Spaces</div></div>
+      <div class="stat-item"><div class="stat-num green" id="s-avail">–</div><div class="stat-lbl">Available</div></div>
+      <div class="stat-item"><div class="stat-num yellow" id="s-partial">–</div><div class="stat-lbl">Partial</div></div>
+      <div class="stat-item"><div class="stat-num red" id="s-full">–</div><div class="stat-lbl">Full</div></div>
+    </div>
+    <div class="refresh-tag" id="refresh-tag">
+      <span class="spin">↻</span> Loading live status…
+    </div>
+  </div>
+</div>
+
+<!-- ROOMS SECTION -->
+<div class="rooms-section">
+  <div class="section-header">
+    <div class="section-tag">Available Spaces</div>
+    <h2 class="section-title">All Community Centre Rooms</h2>
+    <p class="section-sub">Click any room to check in · Updated in real time</p>
+  </div>
+  <div class="rooms-grid" id="rooms-grid">
+    <!-- injected by JS -->
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how-section">
+  <div style="text-align:center;margin-bottom:40px">
+    <div class="section-tag">How It Works</div>
+    <h2 class="section-title">Book in 3 Simple Steps</h2>
+  </div>
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-num">1</div>
+      <div class="how-title">Scan QR Code</div>
+      <div class="how-desc">Each room has a unique QR code at the entrance. Scan with your phone camera.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">2</div>
+      <div class="how-title">Register Entry</div>
+      <div class="how-desc">Fill your name, USN, team members, and purpose. Takes under 30 seconds.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">3</div>
+      <div class="how-title">Check Out</div>
+      <div class="how-desc">Tap "Leave Room" when you're done. Room availability updates instantly.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">4</div>
+      <!-- <div class="how-title">View History</div> -->
+      <div class="how-desc">All your check-ins and check-outs are saved with timestamps and duration.</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <strong>CentreBook</strong> · SVCE Bengaluru Community Centre · Smart Booking System
+</footer>
+
+<script>
+const API = 'http://localhost:8080/api';
+
+const ROOMS = [
+  { id:1,  name:'Cabin 1',              type:'Small Cabin',        capacity:6,  img:'images/cabin-overhead.jpg' },
+  { id:2,  name:'Cabin 2',              type:'Small Cabin',        capacity:6,  img:'images/cabin-table.jpg' },
+  { id:3,  name:'Cabin 3',              type:'Small Cabin',        capacity:6,  img:'images/cabin-overhead.jpg' },
+  { id:4,  name:'Cabin 4',              type:'Small Cabin',        capacity:6,  img:'images/cabin-table.jpg' },
+  { id:5,  name:'Project Room A',       type:'Project Room',       capacity:12, img:'images/project-room-1.jpg' },
+  { id:6,  name:'Project Room B',       type:'Project Room',       capacity:12, img:'images/project-room-2.jpg' },
+  { id:7,  name:'Open Space(Front)', type:'Open Space · 1',       capacity:25, img:'images/exterior view (5) - Copy.jpeg' },
+  { id:8,  name:'Main Hall',            type:'Ground Floor Hall',  capacity:80, img:'images/main-hall-1.jpg' },
+  { id:9,  name:'Seminar Room(Top Floor)',         type:'Seminar / Training', capacity:30, img:'images/open-space-2.jpg' },
+  { id:10, name:'Discussion Room',      type:'Open Space · 2',       capacity:10, img:'exterior view (5) - Copy.jpeg' },
+];
+
+function sc(occ, cap){ return occ===0?'available':occ>=cap?'full':'partial'; }
+const scLabel = {available:'Available', partial:'Partial', full:'Full'};
+
+async function load() {
+  let rooms = ROOMS.map(r=>({...r, occupied:0}));
+  try {
+    const res = await fetch(`${API}/rooms`);
+    if (res.ok) {
+      const data = await res.json();
+      rooms = ROOMS.map(r => {
+        const live = data.find(d=>d.id===r.id)||{};
+        return {...r, occupied: live.occupied||0};
+      });
+    }
+  } catch {}
+  render(rooms);
+}
+
+function render(rooms) {
+  let avail=0, partial=0, full=0;
+  document.getElementById('rooms-grid').innerHTML = rooms.map(r => {
+    const s = sc(r.occupied, r.capacity);
+    const pct = Math.round((r.occupied/r.capacity)*100);
+    if(s==='available') avail++;
+    else if(s==='partial') partial++;
+    else full++;
+    return `
+    <div class="room-card" onclick="window.location.href='room.html?room_id=${r.id}'">
+      <div class="room-photo-wrap">
+        <img class="room-photo" src="${r.img}" alt="${r.name}" onerror="this.src='images/cabin-exterior.jpg'"/>
+        <div class="room-photo-overlay"></div>
+        <div class="room-status-badge ${s}">
+          <div class="sbdot"></div>${scLabel[s]}
+        </div>
+      </div>
+      <div class="room-body">
+        <div class="room-name">${r.name}</div>
+        <div class="room-type">${r.type}</div>
+        <div class="cap-row"><span>Occupancy</span><span>${r.occupied} / ${r.capacity}</span></div>
+        <div class="cap-bar-bg"><div class="cap-bar-fill ${s}" style="width:${pct}%"></div></div>
+        <div class="room-footer">
+          <div class="seats-left"><strong>${r.capacity-r.occupied}</strong> seats left</div>
+          <button class="book-btn" ${s==='full'?'disabled':''} onclick="event.stopPropagation();window.location.href='room.html?room_id=${r.id}'">
+            ${s==='full'?'Room Full':'Book Now'}
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('s-avail').textContent = avail;
+  document.getElementById('s-partial').textContent = partial;
+  document.getElementById('s-full').textContent = full;
+  const now = new Date().toLocaleTimeString();
+  document.getElementById('refresh-tag').innerHTML = `✓ Updated at ${now}`;
+  document.getElementById('refresh-tag').style.color = '#4ADE80';
+}
+let slides = document.querySelectorAll(".slide");
+let index = 0;
+
+setInterval(() => {
+  if(slides.length === 0) return;
+
+  slides[index].classList.remove("active");
+  index = (index + 1) % slides.length;
+  slides[index].classList.add("active");
+}, 3000);
+
+// ===== LOGOUT FUNCTION =====
+function logout() {
+  localStorage.removeItem("user");
+  alert("Logged out successfully");
+  window.location.href = "index.html";
+}
+// ===== CHECK LOGIN =====
+function checkLogin() {
+  const user = localStorage.getItem("user");
+  if (!user) {
+    alert("Please login first!");
+    window.location.href = "login.html";
+  }
+}
+
+load();
+setInterval(load, 30000);
+</script>
+</body>
+</html>

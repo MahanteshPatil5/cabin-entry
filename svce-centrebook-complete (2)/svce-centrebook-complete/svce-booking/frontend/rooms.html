@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All Rooms – CentreBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #1E3A8A;
+      --primary-light: #3B82F6;
+      --green: #22C55E;
+      --green-bg: #F0FDF4;
+      --yellow: #F59E0B;
+      --yellow-bg: #FFFBEB;
+      --red: #EF4444;
+      --red-bg: #FEF2F2;
+      --gray-100: #F3F4F6;
+      --gray-200: #E5E7EB;
+      --gray-400: #9CA3AF;
+      --gray-600: #4B5563;
+      --gray-800: #1F2937;
+      --radius: 14px;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: #F0F4FF; min-height: 100vh; color: var(--gray-800); }
+
+    nav {
+      background: var(--primary);
+      padding: 0 28px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 12px rgba(30,58,138,.3);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-left { display: flex; align-items: center; gap: 16px; }
+    .back-btn {
+      background: rgba(255,255,255,.15);
+      border: none; color: white;
+      width: 34px; height: 34px;
+      border-radius: 50%; font-size: 18px;
+      cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      text-decoration: none;
+    }
+    .nav-brand { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: white; text-decoration: none; }
+    .nav-brand span { color: #93C5FD; }
+    .nav-right { display: flex; gap: 8px; }
+    .nav-btn {
+      background: rgba(255,255,255,.12);
+      border: none; color: white;
+      padding: 7px 16px; border-radius: 8px;
+      font-size: 13px; cursor: pointer;
+      transition: background .2s; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .nav-btn:hover { background: rgba(255,255,255,.22); }
+    .nav-btn.active { background: rgba(255,255,255,.25); font-weight: 500; }
+
+    /* PAGE HEADER */
+    .page-header {
+      background: linear-gradient(135deg, #1E3A8A, #2563EB);
+      padding: 32px 28px 48px;
+      color: white;
+    }
+    .page-header h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px; font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .page-header p { color: #BFDBFE; font-size: 15px; }
+    .header-stats {
+      display: flex; gap: 24px;
+      margin-top: 20px; flex-wrap: wrap;
+    }
+    .hstat {
+      background: rgba(255,255,255,.12);
+      border-radius: 10px;
+      padding: 10px 18px;
+      text-align: center;
+      min-width: 80px;
+    }
+    .hstat-num { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; }
+    .hstat-lbl { font-size: 11px; color: #93C5FD; text-transform: uppercase; letter-spacing: .5px; }
+
+    main { max-width: 1100px; margin: -24px auto 40px; padding: 0 20px; }
+
+    .legend {
+      display: flex; gap: 20px; flex-wrap: wrap;
+      background: white; padding: 14px 20px;
+      border-radius: var(--radius);
+      box-shadow: 0 1px 4px rgba(0,0,0,.07);
+      margin-bottom: 22px;
+    }
+    .legend-item { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--gray-600); }
+    .ldot { width: 10px; height: 10px; border-radius: 50%; }
+
+    .section-bar {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px; font-weight: 600;
+    }
+    .refresh-btn {
+      background: white; border: 1.5px solid var(--gray-200);
+      color: var(--gray-600); padding: 7px 14px;
+      border-radius: 8px; font-size: 13px; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      transition: all .2s;
+    }
+    .refresh-btn:hover { border-color: var(--primary-light); color: var(--primary); }
+
+    .room-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 18px;
+    }
+    .room-card {
+      background: white; border-radius: var(--radius);
+      box-shadow: 0 1px 4px rgba(0,0,0,.07);
+      padding: 20px; cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+      border: 2px solid transparent;
+      position: relative; overflow: hidden;
+    }
+    .room-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,.1); }
+    .room-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 4px;
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+    .room-card.available::before { background: var(--green); }
+    .room-card.partial::before { background: var(--yellow); }
+    .room-card.full::before { background: var(--red); }
+
+    .room-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+    .room-name { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600; }
+    .room-type { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+
+    .status-badge {
+      display: flex; align-items: center; gap: 5px;
+      padding: 4px 10px; border-radius: 20px;
+      font-size: 12px; font-weight: 500; white-space: nowrap;
+    }
+    .status-badge.available { background: var(--green-bg); color: #15803D; }
+    .status-badge.partial { background: var(--yellow-bg); color: #92400E; }
+    .status-badge.full { background: var(--red-bg); color: #B91C1C; }
+    .sdot { width: 7px; height: 7px; border-radius: 50%; }
+    .available .sdot { background: var(--green); }
+    .partial .sdot { background: var(--yellow); }
+    .full .sdot { background: var(--red); }
+
+    .cap-info { margin: 12px 0 8px; }
+    .cap-lbl { display: flex; justify-content: space-between; font-size: 13px; color: var(--gray-600); margin-bottom: 6px; }
+    .cap-bar { height: 6px; background: var(--gray-100); border-radius: 4px; overflow: hidden; }
+    .cap-fill { height: 100%; border-radius: 4px; transition: width .4s; }
+    .cap-fill.available { background: var(--green); }
+    .cap-fill.partial { background: var(--yellow); }
+    .cap-fill.full { background: var(--red); }
+
+    .room-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; }
+    .seats-left { font-size: 13px; color: var(--gray-600); }
+    .seats-left strong { color: var(--gray-800); }
+    .book-btn {
+      background: var(--primary); color: white;
+      border: none; padding: 8px 16px;
+      border-radius: 8px; font-size: 13px;
+      font-weight: 500; cursor: pointer;
+      transition: background .2s;
+    }
+    .book-btn:hover { background: #1d4ed8; }
+    .book-btn:disabled { background: var(--gray-200); color: var(--gray-400); cursor: not-allowed; }
+
+    /* SCAN MODAL */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.55); z-index: 200;
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: white; border-radius: 20px;
+      width: 100%; max-width: 420px; overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,.15);
+      animation: slideUp .3s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal-header {
+      background: var(--primary); padding: 20px 24px;
+      color: white; display: flex;
+      align-items: center; justify-content: space-between;
+    }
+    .modal-header h2 { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600; }
+    .modal-close {
+      background: rgba(255,255,255,.15); border: none;
+      color: white; width: 32px; height: 32px;
+      border-radius: 50%; font-size: 18px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-body { padding: 24px; }
+    #qr-reader { width: 100% !important; border-radius: 12px; overflow: hidden; }
+    .scanner-hint { text-align: center; color: var(--gray-400); font-size: 13px; margin-top: 12px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <a href="welcome.html" class="back-btn">←</a>
+    <a href="welcome.html" class="nav-brand">Centre<span>Book</span></a>
+  </div>
+  <div class="nav-right">
+    <!-- <button class="nav-btn active">🏠 Rooms</button> -->
+    <!-- <a href="history.html" class="nav-btn">📋 History</a> -->
+    <button class="nav-btn" onclick="openScanner()">📷 Scan QR</button>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>All Spaces</h1>
+  <p>Select a room to check availability and book your entry</p>
+  <div class="header-stats">
+    <div class="hstat"><div class="hstat-num">10</div><div class="hstat-lbl">Total</div></div>
+    <div class="hstat"><div class="hstat-num" id="stat-avail">–</div><div class="hstat-lbl">Available</div></div>
+    <div class="hstat"><div class="hstat-num" id="stat-partial">–</div><div class="hstat-lbl">Partial</div></div>
+    <div class="hstat"><div class="hstat-num" id="stat-full">–</div><div class="hstat-lbl">Full</div></div>
+  </div>
+</div>
+
+<main>
+  <div class="legend">
+    <div class="legend-item"><div class="ldot" style="background:#22C55E"></div> Available</div>
+    <div class="legend-item"><div class="ldot" style="background:#F59E0B"></div> Partially Occupied</div>
+    <div class="legend-item"><div class="ldot" style="background:#EF4444"></div> Fully Occupied</div>
+  </div>
+  <div class="section-bar">
+    <div class="section-title">Choose a Room</div>
+    <button class="refresh-btn" onclick="loadRooms()">↻ Refresh</button>
+  </div>
+  <div class="room-grid" id="room-grid"></div>
+</main>
+
+<!-- SCANNER MODAL -->
+<div class="modal-overlay" id="scanner-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Scan Room QR Code</h2>
+      <button class="modal-close" onclick="closeScanner()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="qr-reader"></div>
+      <p class="scanner-hint">Point your camera at a room's QR code</p>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script>
+  const API = 'http://localhost:8080/api';
+  let html5QrCode = null;
+
+  const ROOMS_STATIC = [
+    { id:1, name:'Cabin 1', type:'Small Cabin', capacity:6 },
+    { id:2, name:'Cabin 2', type:'Small Cabin', capacity:6 },
+    { id:3, name:'Cabin 3', type:'Small Cabin', capacity:6 },
+    { id:4, name:'Cabin 4', type:'Small Cabin', capacity:6 },
+    { id:5, name:'Project Room A', type:'Project Room', capacity:12 },
+    { id:6, name:'Project Room B', type:'Project Room', capacity:12 },
+    { id:7, name:'Top Floor Open Space', type:'Open Space', capacity:40 },
+    { id:8, name:'Main Hall', type:'Ground Floor Hall', capacity:80 },
+    { id:9, name:'Seminar Room', type:'Seminar', capacity:30 },
+    { id:10, name:'Discussion Room', type:'Meeting', capacity:10 },
+  ];
+
+  function sc(occupied, capacity) {
+    if (occupied === 0) return 'available';
+    if (occupied >= capacity) return 'full';
+    return 'partial';
+  }
+  const scLabel = { available:'Available', partial:'Partial', full:'Full' };
+
+  async function loadRooms() {
+    let rooms = ROOMS_STATIC.map(r => ({ ...r, occupied: 0 }));
+    try {
+      const res = await fetch(`${API}/rooms`);
+      if (res.ok) rooms = await res.json();
+    } catch {}
+    renderRooms(rooms);
+  }
+
+  function renderRooms(rooms) {
+    let avail=0, partial=0, full=0;
+    document.getElementById('room-grid').innerHTML = rooms.map(r => {
+      const s = sc(r.occupied, r.capacity);
+      const pct = Math.round((r.occupied / r.capacity) * 100);
+      if (s==='available') avail++;
+      else if (s==='partial') partial++;
+      else full++;
+      return `
+      <div class="room-card ${s}" onclick="window.location.href='room.html?room_id=${r.id}'">
+        <div class="room-header">
+          <div><div class="room-name">${r.name}</div><div class="room-type">${r.type}</div></div>
+          <div class="status-badge ${s}"><div class="sdot"></div>${scLabel[s]}</div>
+        </div>
+        <div class="cap-info">
+          <div class="cap-lbl"><span>Occupancy</span><span>${r.occupied} / ${r.capacity}</span></div>
+          <div class="cap-bar"><div class="cap-fill ${s}" style="width:${pct}%"></div></div>
+        </div>
+        <div class="room-footer">
+          <div class="seats-left"><strong>${r.capacity - r.occupied}</strong> seats left</div>
+          <button class="book-btn" ${s==='full'?'disabled':''} onclick="event.stopPropagation();window.location.href='room.html?room_id=${r.id}'">
+            ${s==='full'?'Full':'Book'}
+          </button>
+        </div>
+      </div>`;
+    }).join('');
+    document.getElementById('stat-avail').textContent = avail;
+    document.getElementById('stat-partial').textContent = partial;
+    document.getElementById('stat-full').textContent = full;
+  }
+
+  function openScanner() {
+    document.getElementById('scanner-modal').classList.add('open');
+    html5QrCode = new Html5Qrcode('qr-reader');
+    html5QrCode.start(
+      { facingMode: 'environment' },
+      { fps: 10, qrbox: { width: 250, height: 250 } },
+      (text) => {
+        closeScanner();
+        try {
+          const url = new URL(text);
+          const roomId = url.searchParams.get('room_id');
+          window.location.href = roomId ? `room.html?room_id=${roomId}` : text;
+        } catch { window.location.href = text; }
+      }, () => {}
+    ).catch(() => alert('Camera permission denied'));
+  }
+
+  function closeScanner() {
+    document.getElementById('scanner-modal').classList.remove('open');
+    if (html5QrCode) { html5QrCode.stop().catch(()=>{}); html5QrCode = null; }
+  }
+
+  loadRooms();
+  setInterval(loadRooms, 30000);
+</script>
+</body>
+</html>

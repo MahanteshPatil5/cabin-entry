@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cabin Management - SVCE CentreBook Admin</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+    <nav class="admin-navbar" id="adminNavbar">
+        <div class="nav-brand">
+            <span class="brand-title">SVCE CentreBook</span>
+            <span class="badge">Admin Portal</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="admin-dashboard.html" id="navHome" class="nav-link">Home</a></li>
+            <li><a href="admin-cabin-management.html" id="navCabinManagement" class="nav-link active">Cabin
+                    Management</a></li>
+            <li><a href="admin-history.html" id="navHistory" class="nav-link">History</a></li>
+            <li><button id="adminLogoutBtn" class="btn btn-danger btn-sm">Logout</button></li>
+        </ul>
+    </nav>
+
+    <main class="main-content" id="cabinManagement">
+        <div class="page-header">
+            <h1>Cabin Management</h1>
+            <p>Add new cabins, edit capacity, update status, or remove unused rooms.</p>
+        </div>
+
+        <div id="cabinMessage" class="alert hidden"></div>
+
+        <div class="layout-two-column">
+            <!-- Add / Edit Form -->
+            <div class="card">
+                <h3 id="formTitle">Add New Cabin</h3>
+                <form id="addCabinForm">
+                    <input type="hidden" id="cabinId">
+
+                    <div class="form-group">
+                        <label for="cabinName">Cabin Name</label>
+                        <input type="text" id="cabinName" class="form-control" placeholder="e.g. Project Room A"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cabinType">Cabin Type</label>
+                        <select id="cabinType" class="form-control" required>
+                            <option value="">Select Type</option>
+                            <option value="Mini Cabin">Mini Cabin</option>
+                            <option value="Project Room">Project Room</option>
+                            <option value="Main Hall">Main Hall</option>
+                            <option value="Seminar Hall">Seminar Hall</option>
+                            <option value="Open Space">Open Space</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cabinCapacity">Capacity</label>
+                        <input type="number" id="cabinCapacity" class="form-control" min="1" placeholder="e.g. 12"
+                            required>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="button" id="saveCabinBtn" class="btn btn-primary">Save Cabin</button>
+                        <button type="button" id="cancelCabinBtn" class="btn btn-secondary">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Existing Cabins Table -->
+            <div class="card">
+                <div class="card-header-actions">
+                    <h3>All Cabins</h3>
+                    <input type="text" id="cabinSearch" class="form-control form-control-sm"
+                        placeholder="Search cabins...">
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table" id="cabinsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Capacity</th>
+                                <th>Occupancy</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cabinTableBody">
+                            <tr>
+                                <td colspan="7" class="text-center">Loading cabin data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/admin-cabin-management.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout | CentreBook</title>
+    <style>
+        /* --- CSS STYLES --- */
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --primary-blue: #3b82f6;
+            --hover-blue: #2563eb;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+        nav {
+            background-color: var(--card-bg);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            letter-spacing: -0.5px;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        .nav-links a.active {
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--primary-blue);
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .logout-card {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 450px;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .logout-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background-color: var(--bg-dark);
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, opacity 0.3s;
+            margin-top: 1rem;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--hover-blue);
+        }
+
+        .btn-submit:disabled {
+            background-color: #475569;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        #messageBox {
+            margin-top: 1.5rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .msg-success {
+            display: block !important;
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .msg-error {
+            display: block !important;
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            border: 1px solid var(--error);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 480px) {
+            nav {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .logout-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="welcome.html" class="nav-brand , logo">Centre<span>Book</span></a>
+        <!-- <div class="logo">CentreBook</div> -->
+        <div class="nav-links">
+            <a href="welcome.html">Home</a>
+            <a href="rooms.html">Rooms</a>
+            <!-- <a href="history.html">History</a> -->
+            <a href="logout.html" class="active">Logout</a>
+        </div>
+    </nav>
+
+    <!-- <main>
+        <section class="logout-card">
+            <div class="header">
+                <h1>Exit / Logout from Cabin</h1>
+                <p>Enter your details to leave the room</p>
+            </div>
+
+            <form id="logoutForm">
+                <div class="form-group">
+                    <label>Select Role</label>
+                    <select id="role" onchange="toggleFields()">
+                        <option value="STUDENT">Student</option>
+                        <option value="PROFESSOR">Professor</option>
+                    </select>
+                </div>
+                <div class="form-group" id="usnGroup">
+                    <label for="usn">Student USN</label>
+                    <input type="text" id="usn" placeholder="e.g. 1MS21CS001" required>
+                </div>
+
+                <div class="form-group" id="nameGroup" style="display: none;">
+                    <label for="name">Professor Name</label>
+                    <input type="text" id="name" placeholder="e.g. Dr. John Doe">
+                </div>
+
+                <div class="form-group">
+                    <label for="cabin">Cabin Name / Room</label>
+                    <select id="cabin" required>
+                        <option value="" disabled selected>
+                            Loading cabins...
+                        </option>
+                    </select>
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn-submit">Logout / Check-Out</button>
+            </form>
+
+            <div id="messageBox"></div>
+        </section>
+    </main> -->
+    <main>
+        <section class="logout-card">
+
+            <div class="header">
+                <h1>Exit / Logout from Cabin</h1>
+                <p>Check your active entry and check out</p>
+            </div>
+
+
+            <!-- CURRENT ACTIVE ENTRY -->
+            <div id="activeEntryInfo" class="active-entry-info">
+
+                <p>Loading active entry...</p>
+
+            </div>
+
+
+            <!-- MESSAGE -->
+            <div id="messageBox"></div>
+
+
+            <!-- CHECK-OUT BUTTON -->
+            <button type="button" id="submitBtn" class="btn-submit" onclick="checkOut()">
+
+                Logout / Check-Out
+
+            </button>
+
+        </section>
+    </main>
+    <script>
+        const messageBox = document.getElementById('messageBox');
+        const submitBtn = document.getElementById('submitBtn');
+
+        const API = 'http://localhost:8080/api';
+
+        // ==========================================
+        // LOAD CURRENT ACTIVE ENTRY
+        // ==========================================
+
+        function loadActiveEntry() {
+
+            const storedEntry = sessionStorage.getItem('activeEntry');
+
+            if (!storedEntry) {
+                showMessage(
+                    'No active entry found. Please register first.',
+                    'error'
+                );
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'No Active Entry';
+
+                return;
+            }
+
+            try {
+
+                const entry = JSON.parse(storedEntry);
+
+                console.log("Active Entry:", entry);
+
+                // Show information on page
+                displayEntry(entry);
+
+            } catch (error) {
+
+                console.error(
+                    'Error reading active entry:',
+                    error
+                );
+
+                showMessage(
+                    'Invalid active entry data.',
+                    'error'
+                );
+
+                submitBtn.disabled = true;
+            }
+        }
+
+
+        // ==========================================
+        // DISPLAY CURRENT USER
+        // ==========================================
+
+        function displayEntry(entry) {
+
+            const infoBox =
+                document.getElementById('activeEntryInfo');
+
+            if (!infoBox) {
+                console.error(
+                    'activeEntryInfo element not found'
+                );
+                return;
+            }
+
+            const roleLabel =
+                entry.role === 'Professor'
+                    ? 'Department'
+                    : 'USN';
+
+            const entryTime =
+                entry.entryTime
+                    ? new Date(entry.entryTime).toLocaleString()
+                    : 'N/A';
+
+            infoBox.innerHTML = `
+            <div class="entry-row">
+                <strong>Name:</strong>
+                <span>${entry.name || 'N/A'}</span>
+            </div>
+
+            <div class="entry-row">
+                <strong>Role:</strong>
+                <span>${entry.role || 'N/A'}</span>
+            </div>
+
+            <div class="entry-row">
+                <strong>${roleLabel}:</strong>
+                <span>${entry.usnOrDept || 'N/A'}</span>
+            </div>
+
+            <div class="entry-row">
+                <strong>Cabin:</strong>
+                <span>${entry.roomName || 'N/A'}</span>
+            </div>
+
+            <div class="entry-row">
+                <strong>People:</strong>
+                <span>${entry.peopleCount || 1}</span>
+            </div>
+
+            <div class="entry-row">
+                <strong>Check-in:</strong>
+                <span>${entryTime}</span>
+            </div>
+        `;
+        }
+
+
+        // ==========================================
+        // CHECK OUT
+        // ==========================================
+
+        async function checkOut() {
+
+            const storedEntry =
+                sessionStorage.getItem('activeEntry');
+
+            if (!storedEntry) {
+
+                showMessage(
+                    'No active entry found.',
+                    'error'
+                );
+
+                return;
+            }
+
+            let entry;
+
+            try {
+
+                entry = JSON.parse(storedEntry);
+
+            } catch (error) {
+
+                showMessage(
+                    'Invalid active entry.',
+                    'error'
+                );
+
+                return;
+            }
+
+            if (!entry.id) {
+
+                showMessage(
+                    'Entry ID not found.',
+                    'error'
+                );
+
+                return;
+            }
+
+            const confirmed =
+                confirm(
+                    'Are you sure you want to check out?'
+                );
+
+            if (!confirmed) {
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Checking Out...';
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API}/entries/${entry.id}/exit`,
+                        {
+                            method: 'PUT'
+                        }
+                    );
+
+                if (!response.ok) {
+
+                    const data =
+                        await response.json()
+                            .catch(() => ({}));
+
+                    showMessage(
+                        data.message ||
+                        'Could not complete checkout.',
+                        'error'
+                    );
+
+                    submitBtn.disabled = false;
+                    submitBtn.textContent =
+                        'Logout / Check-Out';
+
+                    return;
+                }
+
+
+                // ==================================
+                // REMOVE ACTIVE ENTRY FROM BROWSER
+                // ==================================
+
+                sessionStorage.removeItem(
+                    'activeEntry'
+                );
+
+
+                showMessage(
+                    'Logged out successfully!',
+                    'success'
+                );
+
+
+                // Go back to rooms after short delay
+
+                setTimeout(() => {
+
+                    window.location.href =
+                        'rooms.html';
+
+                }, 1000);
+
+
+            } catch (error) {
+
+                console.error(
+                    'Checkout error:',
+                    error
+                );
+
+                showMessage(
+                    'Connection error. Is the server running?',
+                    'error'
+                );
+
+                submitBtn.disabled = false;
+
+                submitBtn.textContent =
+                    'Logout / Check-Out';
+            }
+        }
+
+
+        // ==========================================
+        // MESSAGE
+        // ==========================================
+
+        function showMessage(text, type) {
+
+            messageBox.textContent = text;
+
+            messageBox.className =
+                type === 'success'
+                    ? 'msg-success'
+                    : 'msg-error';
+
+            messageBox.style.display = 'block';
+        }
+
+
+        // ==========================================
+        // PAGE LOAD
+        // ==========================================
+
+        loadActiveEntry();
+
+    </script>
+</body>
+
+</html>

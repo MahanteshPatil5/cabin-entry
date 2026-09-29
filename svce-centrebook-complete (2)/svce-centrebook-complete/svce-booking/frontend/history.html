@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>History – CentreBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #1E3A8A; --primary-light: #3B82F6;
+      --green: #22C55E; --green-bg: #F0FDF4;
+      --gray-100:#F3F4F6; --gray-200:#E5E7EB;
+      --gray-400:#9CA3AF; --gray-600:#4B5563; --gray-800:#1F2937;
+      --red:#EF4444; --red-bg:#FEF2F2;
+      --radius: 14px;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: #F0F4FF; min-height: 100vh; color: var(--gray-800); }
+    nav { background: var(--primary); padding: 0 20px; height: 56px; display: flex; align-items: center; gap: 14px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(30,58,138,.25); }
+    .back-btn { background: rgba(255,255,255,.15); border: none; color: white; width: 34px; height: 34px; border-radius: 50%; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+    .nav-title { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600; color: white; flex: 1; }
+    .clear-btn { background: rgba(239,68,68,.3); border: none; color: white; padding: 7px 14px; border-radius: 8px; font-size: 13px; cursor: pointer; }
+    .clear-btn:hover { background: rgba(239,68,68,.5); }
+
+    .page-header { background: linear-gradient(135deg, #1E3A8A, #2563EB); padding: 28px 20px 44px; color: white; }
+    .page-header h1 { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+    .page-header p { color: #BFDBFE; font-size: 14px; }
+    .header-stats { display: flex; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+    .hstat { background: rgba(255,255,255,.12); border-radius: 10px; padding: 10px 16px; text-align: center; }
+    .hstat-num { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; }
+    .hstat-lbl { font-size: 11px; color: #93C5FD; text-transform: uppercase; letter-spacing: .5px; }
+
+    main { max-width: 720px; margin: -20px auto 40px; padding: 0 16px; }
+
+    /* FILTERS */
+    .filter-bar { background: white; border-radius: var(--radius); padding: 14px 18px; margin-bottom: 18px; box-shadow: 0 1px 4px rgba(0,0,0,.07); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .filter-label { font-size: 13px; color: var(--gray-600); font-weight: 500; }
+    .filter-btn { background: var(--gray-100); border: 1.5px solid var(--gray-200); color: var(--gray-600); padding: 6px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; transition: all .2s; }
+    .filter-btn:hover, .filter-btn.active { background: #EFF6FF; border-color: var(--primary-light); color: var(--primary); font-weight: 500; }
+    .search-input { flex: 1; min-width: 180px; padding: 8px 12px; border: 1.5px solid var(--gray-200); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none; }
+    .search-input:focus { border-color: var(--primary-light); }
+
+    /* HISTORY CARDS */
+    .history-list { display: flex; flex-direction: column; gap: 12px; }
+    .history-card {
+      background: white; border-radius: var(--radius);
+      padding: 18px 20px; box-shadow: 0 1px 4px rgba(0,0,0,.07);
+      border-left: 5px solid var(--gray-200);
+      transition: transform .2s;
+    }
+    .history-card:hover { transform: translateX(3px); }
+    .history-card.active-entry { border-color: var(--green); }
+    .history-card.exited-entry { border-color: var(--gray-200); }
+
+    .hc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+    .hc-left { }
+    .hc-name { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600; }
+    .hc-room { font-size: 13px; color: var(--primary-light); margin-top: 2px; }
+    .hc-badge { font-size: 12px; padding: 4px 12px; border-radius: 20px; font-weight: 500; white-space: nowrap; }
+    .hc-badge.active { background: var(--green-bg); color: #15803D; }
+    .hc-badge.exited { background: var(--gray-100); color: var(--gray-600); }
+
+    .hc-details { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--gray-100); }
+    .hc-detail-item { }
+    .hc-detail-key { font-size: 11px; color: var(--gray-400); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 2px; }
+    .hc-detail-val { font-size: 13px; font-weight: 500; color: var(--gray-800); }
+
+    .hc-timeline { display: flex; gap: 16px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--gray-100); flex-wrap: wrap; }
+    .timeline-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gray-600); }
+    .timeline-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .timeline-dot.in { background: var(--green); }
+    .timeline-dot.out { background: var(--gray-400); }
+    .duration { background: var(--gray-100); padding: 2px 8px; border-radius: 10px; font-size: 11px; color: var(--gray-600); font-weight: 500; }
+
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--gray-400); }
+    .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .empty-state p { font-size: 15px; }
+    .empty-state a { color: var(--primary-light); text-decoration: none; font-weight: 500; }
+
+    /* ADMIN toggle */
+    .admin-section { margin-top: 28px; }
+    .admin-title { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
+    .admin-table-wrap { background: white; border-radius: var(--radius); overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.07); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { background: var(--primary); color: white; padding: 11px 14px; text-align: left; font-weight: 500; }
+    td { padding: 11px 14px; border-bottom: 1px solid var(--gray-100); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--gray-100); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="rooms.html" class="back-btn">←</a>
+  <div class="nav-title">Booking History</div>
+  <button class="clear-btn" onclick="clearHistory()">Clear All</button>
+</nav>
+
+<div class="page-header">
+  <h1>📋 Activity History</h1>
+  <p>All login and logout records for this device</p>
+  <div class="header-stats">
+    <div class="hstat"><div class="hstat-num" id="stat-total">0</div><div class="hstat-lbl">Total</div></div>
+    <div class="hstat"><div class="hstat-num" id="stat-active">0</div><div class="hstat-lbl">Active</div></div>
+    <div class="hstat"><div class="hstat-num" id="stat-exited">0</div><div class="hstat-lbl">Exited</div></div>
+  </div>
+</div>
+
+<main>
+  <!-- FILTERS -->
+  <div class="filter-bar">
+    <span class="filter-label">Filter:</span>
+    <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+    <button class="filter-btn" onclick="setFilter('active', this)">Active</button>
+    <button class="filter-btn" onclick="setFilter('exited', this)">Exited</button>
+    <button class="filter-btn" onclick="setFilter('student', this)">Students</button>
+    <button class="filter-btn" onclick="setFilter('professor', this)">Professors</button>
+    <input class="search-input" type="text" id="search-input" placeholder="Search by name or room…" oninput="renderHistory()" />
+  </div>
+
+  <!-- HISTORY LIST -->
+  <div class="history-list" id="history-list"></div>
+
+  <!-- ADMIN: ALL ACTIVE (from backend) -->
+  <div class="admin-section" id="admin-section">
+    <div class="admin-title">
+      🖥️ Live Active Bookings (Server)
+      <button onclick="loadAdminData()" style="background:var(--gray-100);border:none;padding:6px 14px;border-radius:8px;font-size:12px;cursor:pointer">Refresh</button>
+    </div>
+    <div class="admin-table-wrap">
+      <table>
+        <thead><tr><th>Room</th><th>Name</th><th>Role</th><th>Purpose</th><th>Check In</th></tr></thead>
+        <tbody id="admin-tbody"><tr><td colspan="5" style="text-align:center;color:#9CA3AF;padding:20px">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<script>
+  const API = 'http://localhost:8080/api';
+  let currentFilter = 'all';
+  let allEntries = [];
+
+  const ROOMS_STATIC = {1:'Cabin 1',2:'Cabin 2',3:'Cabin 3',4:'Cabin 4',5:'Project Room A',6:'Project Room B',7:'Top Floor Open Space',8:'Main Hall',9:'Seminar Room',10:'Discussion Room'};
+
+  function loadHistory() {
+    allEntries = JSON.parse(localStorage.getItem('cc_history') || '[]');
+    // Also try to fetch from backend and merge
+    fetchBackendHistory();
+    renderHistory();
+    updateStats();
+  }
+
+  async function fetchBackendHistory() {
+    try {
+      const res = await fetch(`${API}/entries/active`);
+      if (res.ok) {
+        const active = await res.json();
+        // Merge backend active entries
+        active.forEach(e => {
+          const idx = allEntries.findIndex(a => String(a.id) === String(e.id));
+          const mapped = { id: e.id, roomId: e.roomId, roomName: e.roomName, userName: e.userName, role: e.role, usnOrDept: e.usnOrDept, purpose: e.purpose, peopleCount: e.peopleCount, entryTime: e.entryTime, exitTime: e.exitTime, active: e.active };
+          if (idx !== -1) allEntries[idx] = { ...allEntries[idx], ...mapped };
+          else allEntries.unshift(mapped);
+        });
+        localStorage.setItem('cc_history', JSON.stringify(allEntries.slice(0, 100)));
+        renderHistory();
+        updateStats();
+      }
+    } catch {}
+  }
+
+  function setFilter(f, btn) {
+    currentFilter = f;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderHistory();
+  }
+
+  function renderHistory() {
+    const search = document.getElementById('search-input').value.toLowerCase();
+    let filtered = allEntries.filter(e => {
+      if (currentFilter === 'active' && !e.active) return false;
+      if (currentFilter === 'exited' && e.active) return false;
+      if (currentFilter === 'student' && e.role !== 'Student') return false;
+      if (currentFilter === 'professor' && e.role !== 'Professor') return false;
+      if (search) {
+        const haystack = `${e.userName} ${e.roomName || ROOMS_STATIC[e.roomId] || ''} ${e.purpose} ${e.usnOrDept}`.toLowerCase();
+        if (!haystack.includes(search)) return false;
+      }
+      return true;
+    });
+
+    const list = document.getElementById('history-list');
+    if (!filtered.length) {
+      list.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><p>No records found.<br><a href="rooms.html">Book a room</a> to get started.</p></div>`;
+      return;
+    }
+
+    list.innerHTML = filtered.map(e => {
+      const roomName = e.roomName || ROOMS_STATIC[e.roomId] || `Room ${e.roomId}`;
+      const inTime = e.entryTime ? new Date(e.entryTime) : null;
+      const outTime = e.exitTime ? new Date(e.exitTime) : null;
+      let duration = '';
+      if (inTime && outTime) {
+        const mins = Math.round((outTime - inTime) / 60000);
+        duration = mins < 60 ? `${mins} min` : `${Math.floor(mins/60)}h ${mins%60}m`;
+      }
+      return `
+      <div class="history-card ${e.active ? 'active-entry' : 'exited-entry'}">
+        <div class="hc-header">
+          <div class="hc-left">
+            <div class="hc-name">${e.userName}</div>
+            <div class="hc-room">📍 ${roomName}</div>
+          </div>
+          <div class="hc-badge ${e.active ? 'active' : 'exited'}">${e.active ? '● Currently Inside' : '✓ Exited'}</div>
+        </div>
+        <div class="hc-details">
+          <div class="hc-detail-item"><div class="hc-detail-key">Role</div><div class="hc-detail-val">${e.role}</div></div>
+          <div class="hc-detail-item"><div class="hc-detail-key">${e.role==='Professor'?'Department':'USN'}</div><div class="hc-detail-val">${e.usnOrDept}</div></div>
+          <div class="hc-detail-item"><div class="hc-detail-key">Purpose</div><div class="hc-detail-val">${e.purpose}</div></div>
+          <div class="hc-detail-item"><div class="hc-detail-key">People</div><div class="hc-detail-val">${e.peopleCount}</div></div>
+          ${e.teamMembers ? `<div class="hc-detail-item" style="grid-column:1/-1"><div class="hc-detail-key">Team</div><div class="hc-detail-val">${e.teamMembers}</div></div>` : ''}
+        </div>
+        <div class="hc-timeline">
+          ${inTime ? `<div class="timeline-item"><div class="timeline-dot in"></div><strong>In:</strong> ${inTime.toLocaleString()}</div>` : ''}
+          ${outTime ? `<div class="timeline-item"><div class="timeline-dot out"></div><strong>Out:</strong> ${outTime.toLocaleString()}</div>` : ''}
+          ${duration ? `<span class="duration">⏱ ${duration}</span>` : ''}
+          ${e.active ? `<span class="duration" style="background:#F0FDF4;color:#15803D">⏳ In session</span>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function updateStats() {
+    document.getElementById('stat-total').textContent = allEntries.length;
+    document.getElementById('stat-active').textContent = allEntries.filter(e => e.active).length;
+    document.getElementById('stat-exited').textContent = allEntries.filter(e => !e.active).length;
+  }
+
+  async function loadAdminData() {
+    const tbody = document.getElementById('admin-tbody');
+    try {
+      const res = await fetch(`${API}/entries/active`);
+      if (!res.ok) throw new Error();
+      const entries = await res.json();
+      if (!entries.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#9CA3AF;padding:20px">No active bookings</td></tr>'; return; }
+      tbody.innerHTML = entries.map(e => `
+        <tr>
+          <td><strong>${e.roomName}</strong></td>
+          <td>${e.userName}</td>
+          <td><span style="background:#EFF6FF;color:#1D4ED8;padding:2px 8px;border-radius:20px;font-size:11px">${e.role}</span></td>
+          <td>${e.purpose}</td>
+          <td>${new Date(e.entryTime).toLocaleTimeString()}</td>
+        </tr>`).join('');
+    } catch {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#9CA3AF;padding:20px">Backend not connected</td></tr>';
+    }
+  }
+
+  function clearHistory() {
+    if (!confirm('Clear all local history? This cannot be undone.')) return;
+    localStorage.removeItem('cc_history');
+    allEntries = [];
+    renderHistory(); updateStats();
+  }
+
+  loadHistory();
+  loadAdminData();
+</script>
+</body>
+</html>
